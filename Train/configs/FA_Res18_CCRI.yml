@@ -1,0 +1,55 @@
+model:
+    arch: fanet
+    backbone: resnet18
+data:
+    dataset: ccri 
+    train_split: train  
+    val_split: test
+    img_rows: 720
+    img_cols: 1280
+    path: /dataset/CCRI/
+training:
+    n_workers: 2
+    train_iters: 40000
+    batch_size: 16
+    val_interval: 500
+    print_interval: 25
+    loss:
+        name: OhemCELoss2D
+        thresh: 0.7
+        ignore_index: 250
+    optimizer:
+        name: adaoptimizer
+        momentum: 0.9
+        lr_multi: 1
+        bn_wd_disable: False
+        wd: 5.0e-4
+        lr0: 1.0e-2
+        max_iter: 40000
+        power: 0.9
+        warmup_steps: 1000
+        warmup_start_lr: 1.0e-5
+    train_augmentations:
+        rotate: 5
+        brightness: 0.5
+        contrast: 0.5
+        saturation: 0.5
+        scale: [512,512]
+        rscale: [0.5,2]
+        hflip: 0.5
+        rcrop: [384,384]
+        norm: 255.0
+        cnorm: [[.485, .456, .406],[.229, .224, .225]]
+    resume: 
+    visdom: False
+
+validating:
+    densecrf: False
+    resume: model_best.pth
+    n_workers: 1
+    batch_size: 1
+    outpath: 
+    val_augmentations:
+        scale: [512,512]
+        norm: 255.0
+        cnorm: [[.485, .456, .406],[.229, .224, .225]]
