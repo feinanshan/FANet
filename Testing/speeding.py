@@ -24,15 +24,17 @@ def run(model,size,name):
         x = model(input)
         x = model(input)
         torch.cuda.synchronize()
-        torch.cuda.synchronize()
-        start_ts = time.time()
 
+        
         for i in range(100):
+            
+            torch.cuda.synchronize()
+            start_ts = time.time()
             x = model(input)
-        torch.cuda.synchronize()
-        end_ts = time.time()
+            torch.cuda.synchronize()
+            end_ts = time.time()
 
-        t_cnt = end_ts-start_ts #t_cnt + (end_ts-start_ts)
+            t_cnt += end_ts-start_ts
     print("=======================================")
     print("Model Name: "+name)
     print("FPS: %f"%(100/t_cnt))
